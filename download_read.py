@@ -1,18 +1,8 @@
 ##### 
-# Function ## function to download and analyse papers from google scholar
-# - This function will do a google scholar search based on a query (food + hazard)
-# - It will attempt to download the first 20 results (mostly through scihub)
-# - Then ChatPDF will check through each pdf and answer your question and find quotes within each pdf
-
-# You need
-# 1. To install PyPaperBot (you can do this in anaconda terminal by typing *pip install PyPaperBot*
-# 2. A chatPDF API Key. you can get this by making a chatPDF user and clicking *My Account* on the ChatPDF API website https://www.chatpdf.com/docs/api/backend
-
-
-
-# food systems & climate change
+# food systems # climate change
 # pypaperbot download papers; chatpdf read papers 
-# Anna Mikkelsen, Oct 2023
+# abm Oct 2023
+
 
 
 import requests
@@ -24,40 +14,17 @@ import time
 import pandas as pd
 import re
 
-
-
 # FUNCTIONS to download and review the papers
+
 def download_papers(food, hazard, scholar_pages=[1,2], scholar_results=20, skip_if_folder_exists = True):
-    '''
-    Searches a query on google scholar and downloads the specified number of papers on the specified google scholar page counts of food and hazard for specific pages & number of articles, which are downloaded to a local folder
-
-    Arguments:
-    -----------
-        food: str
-            food, or species/item being impacted
-        hazard: str
-            hazard or impact on food
-        scholar_pages: list of integers. 
-            list of pages to search. default: [1,2]
-        scholar_results: int
-            number of papers to search and download
-        skip_if_folder_exists: bool
-            if true, will load papers downloaded in folder {food}_{hazard} if it exists
-
-    Returns:    
-    -----------
-        pdfs: list of filepaths 
-            list containing all pdfs downloaded in the query
-    '''
-
-
+  ## ----------------------------------- ###
     # specify download folder
     folder_name = f'{food}_{hazard}'
     dwn_dir = os.path.join(os.getcwd(), folder_name)
-    if (os.path.exists(dwn_dir)) and (skip_if_folder_exists):
+    if os.path.exists(dwn_dir) and skip_if_folder_exists:
         pdfs = glob.glob(os.path.join(dwn_dir, '*.pdf'))
         print('found %d papers in the folder "%s"' %(len(pdfs), folder_name))
-    else: 
+    else: # not os.path.exists(dwn_dir)
         os.mkdir(dwn_dir)
         # make query:
         query = f'{food}+{hazard}'
@@ -70,33 +37,8 @@ def download_papers(food, hazard, scholar_pages=[1,2], scholar_results=20, skip_
 
 
 def upload_analyze_papers(food, hazard, pdfs, API_Key, question='default'):
-    '''
-    analyzes content of each pdf file and answers the question asked
-        1. each pdf is loaded in chatpdf (at a rate of 12/minute to avoid timeout errors for free api accounts)
-        2. then question is answered
-        3. and saved into a pandas dataframe 
-
-    Arguments:
-    -----------
-        food: str
-            food, or species/item being impacted
-        hazard: str
-            hazard or impact on food
-        pdfs: list of filepaths 
-            list containing all pdfs downloaded in the query
-        API_Key: str
-            API key for chatpdf. Get api key from https://www.chatpdf.com/docs/api/backend
-        question: str
-            question to ask about pdf. can be a multipart quesiton
-            
-
-    Returns:    
-    -----------
-        pdfs: list of filepaths 
-            list containing all pdfs downloaded in the query
-    '''
-
     all_results = pd.DataFrame(columns=['filename', 'food', 'hazard', 'quote', 'location', 'pos/neg', 'how']) 
+
 
     # Load papers into chatpdf
     # dummy loop to only upload 12/minute
@@ -181,35 +123,7 @@ def upload_analyze_papers(food, hazard, pdfs, API_Key, question='default'):
 
     return all_results
 
-
-
-# combined function to download and review
 def download_read_export(food, hazard, API_Key, scholar_pages=[1,2], scholar_results=20, question='default', skip_if_folder_exists = True):
-
-    '''
-    Combines the functions above to 
-        1. download pdfs from google scholar
-        2. analyze each pdf 
-
-    Arguments:
-    -----------
-        food: str
-            food, or species/item being impacted
-        hazard: str
-            hazard or impact on food
-        API_Key: str
-            API key for chatpdf. Get api key from https://www.chatpdf.com/docs/api/backend
-        question: str
-            question to ask about pdf. can be a multipart quesiton
-        skip_if_folder_exists: bool
-            if true, will load papers downloaded in folder {food}_{hazard} if it exists
-
-    Returns:    
-    -----------
-        pdfs: list of filepaths 
-            list containing all pdfs downloaded in the query
-    '''
-
     start_time = time.time() #start timer
 
     pdfs = download_papers(food, hazard, scholar_pages, scholar_results, skip_if_folder_exists)
@@ -220,6 +134,31 @@ def download_read_export(food, hazard, API_Key, scholar_pages=[1,2], scholar_res
     elapsed_time = end_time - start_time
     print(f'Time taken for "{food}" and "{hazard}":{elapsed_time:.2f} seconds')
 
+
+############# Run it
+
+# foods = ['wheat']#, 'rice', 'tuna', 'apple', 'coffee']
+# hazards = ['heatwave']#, ['drought', 'heatwave', 'warming', 'storm', 'flooding']
+# API_Key = 'sec_6LIDxgLBHBqmhkVam818PYYXqervcPSX' #make a user and get api key from https://www.chatpdf.com/docs/api/backend
+# scholar_pages = [1,2]
+# scholar_results = 5
+# question  = 'default' #f'1a) provide a quote from the text about how {hazard} impacts {food}? 2a) in what region is this study 3a) does {hazard} negatively or positively impact {food} (reply only negatvie/positive) 4a) exactly how is {food} impacted?'
+
+# # Create an empty dataframe to store the results
+# dfall = pd.DataFrame(columns=['filename', 'food', 'hazard', 'quote', 'location', 'pos/neg', 'how']) ## Specify a question in quotes or use the default: "How does {hazard} impact {food}? can you provide a quote from the text about this?"
+# skip_if_folder_exists = True ## dummy variable, if you have the data downloaded already and dont want to re-download it. defualt=True
+
+# # Create an empty dataframe to store the results
+# #dfall = pd.DataFrame(columns=['food', 'hazard', 'quote', 'location', 'page', 'paragraph'])
+
+# ## Run function across combinations of food and hazard
+# for food in foods:
+#   for hazard in hazards:
+#     df = download_read_export(food, hazard, API_Key, scholar_pages=scholar_pages, scholar_results=scholar_results, question=question, skip_if_folder_exists = True)
+#     dfall = pd.concat([dfall, df], ignore_index=True)
+
+# # Print the merged dataframe
+# print(dfall)
 
 
 
