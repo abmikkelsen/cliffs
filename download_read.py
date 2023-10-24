@@ -98,10 +98,10 @@ def upload_analyze_papers(food, hazard, pdfs, API_Key, question='default'):
             results = response.json()['content']
             segments = results.split('a)')  # Split the text using regex
             if len(segments) >= 4:
-                quote = segments[0].strip()
-                location = segments[1].strip()
-                page = segments[2].strip()
-                paragraph = segments[3].strip()
+                quote = segments[1].strip()
+                location = segments[2].strip()
+                posneg = segments[3].strip()
+                how = segments[4].strip()
 
                 # Create a row dictionary for this PDF
                 row_data = {
@@ -110,8 +110,8 @@ def upload_analyze_papers(food, hazard, pdfs, API_Key, question='default'):
                     'hazard': hazard,
                     'quote': quote,
                     'location': location,
-                    'pos/neg': page,
-                    'how': paragraph
+                    'pos/neg': posneg,
+                    'how': how
                 }
 
                 # Append the row data to the results
