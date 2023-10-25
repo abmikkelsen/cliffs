@@ -14,6 +14,32 @@ import time
 import pandas as pd
 import re
 
+#Function to import food list csv and add to search terms
+def import_foodlist(filename):
+    df = pd.read_csv(filename)
+    
+    #extract data from columns
+    foodname_data = df['Foodname'].tolist()
+    species_data = df['Species'].tolist()
+    other_data = df['OtherName'].tolist()
+
+    #remove nan from foodname and other
+    foodname_datac = [x for x in foodname_data if str(x) != 'nan']
+    other_datac = [x for x in other_data if str(x) != 'nan']
+
+    #split other list by /
+    other_datacs = [x for x in other_datac for x in x.split('/')]
+
+    #create a dictionary to store the lists
+    foodlist = {
+        'foodname': foodname_datac,
+        'species': species_data,
+        'other': other_datacs
+    }
+    
+    return foodlist
+
+
 # FUNCTIONS to download and review the papers
 
 def download_papers(food, hazard, scholar_pages=[1,2], scholar_results=20, skip_if_folder_exists = True):
@@ -79,7 +105,7 @@ def upload_analyze_papers(food, hazard, pdfs, API_Key, question='default'):
         }
         print('analyzing file...')
         if question == 'default':
-            question = f'1a) provide a quote from the text about how {hazard} impacts {food}? 2a) in what region is this study 3a) does {hazard} negatively or positively impact {food} (reply only negatvie/positive) 4a) exactly how is {food} impacted?'
+            question = f'1a) provide a quote from the text about how {hazard} impacts {food}? 2a) in what region is this study 3a) does {hazard} negatively or positively impact {food} (reply only negatvie/positive) 4a) would you classify the impact on {food} as direct physiology, indirect abiotic, or indirect biotic?  5) can you give a quote providing an example of this?'
 
         data = {
             'sourceId': sID,
@@ -97,11 +123,12 @@ def upload_analyze_papers(food, hazard, pdfs, API_Key, question='default'):
             print('result:', response.json()['content'])
             results = response.json()['content']
             segments = results.split('a)')  # Split the text using regex
-            if len(segments) >= 4:
+            if len(segments) >= 5:
                 quote = segments[1].strip()
                 location = segments[2].strip()
                 posneg = segments[3].strip()
                 how = segments[4].strip()
+                howquote = segments[5].strip()
 
                 # Create a row dictionary for this PDF
                 row_data = {
@@ -111,7 +138,8 @@ def upload_analyze_papers(food, hazard, pdfs, API_Key, question='default'):
                     'quote': quote,
                     'location': location,
                     'pos/neg': posneg,
-                    'how': how
+                    'how': how,
+                    'howquote': howquote
                 }
 
                 # Append the row data to the results

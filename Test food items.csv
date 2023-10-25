@@ -1,0 +1,11 @@
+Reviewer,Gaps,Source,Group,Subgroup,Foodname,Species,OtherName,Notes
+Camilo,0,FishStatJ,Freshwater fishes,Miscellaneous freshwater fishes,Bocachico,Curimata cyprinoides,Branquinha/Kulupi,
+Camilo,1,BioFoodComp4.0,Fruit,,Assegai tree,Curtisia dentata,Umlahleni/Cape Lancewood,
+Camilo,1,BioFoodComp4.0,Insects,,True water beetle,Cybister limbatus,,
+Erik,0,RegionalLists,Livestock,Poultry,Chicken,Gallus gallus,,
+Kira,1,BioFoodComp4.0,Cereals,,Eincorn wheat grain,Triticum monococcum,,
+Yoko,0,BioFoodComp4.0,Starchy roots and tubers,Potatoes,Potato ,Solanum tuberosum,,
+Hannah,0,BioFoodComp4.0,Starchy roots and tubers,Potatoes,Potato,Solanum stenotomum,Solanum stenotonum,
+Hannah,0,RegionalLists,Vegetables,Fruiting vegetables,Eggplant,Solanum malongena,Aubergine,
+Erik,0,FishStatJ,Marine fishes,"Cods, hakes, haddocks",Alaska pollock,Gadus chalcogrammus,Walleye pollock,
+Kira,2,RegionalLists,,,Wheat,Triticum aestivum,,
