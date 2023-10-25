@@ -27,14 +27,18 @@ def import_foodlist(filename):
     foodname_datac = [x for x in foodname_data if str(x) != 'nan']
     other_datac = [x for x in other_data if str(x) != 'nan']
 
+    #remove duplicates from foodname and other
+    foodname_datacd = list(set(foodname_datac))
+    other_cd = list(set(other_datac))
+
     #split other list by /
-    other_datacs = [x for x in other_datac for x in x.split('/')]
+    other_datacds = [x for x in other_cd for x in x.split('/')]
 
     #create a dictionary to store the lists
     foodlist = {
-        'foodname': foodname_datac,
+        'foodname': foodname_datacd,
         'species': species_data,
-        'other': other_datacs
+        'othername': other_datacds
     }
     
     return foodlist
@@ -62,8 +66,8 @@ def download_papers(food, hazard, scholar_pages=[1,2], scholar_results=20, skip_
     return pdfs
 
 
-def upload_analyze_papers(food, hazard, pdfs, API_Key, question='default'):
-    all_results = pd.DataFrame(columns=['filename', 'food', 'hazard', 'quote', 'location', 'pos/neg', 'how']) 
+def upload_analyze_papers(list,food, hazard, pdfs, API_Key, question='default'):
+    all_results = pd.DataFrame(columns=['filename', 'foodname','species','othername', 'hazard', 'quote', 'location', 'pos/neg', 'how','howquote']) 
 
 
     # Load papers into chatpdf
@@ -133,7 +137,7 @@ def upload_analyze_papers(food, hazard, pdfs, API_Key, question='default'):
                 # Create a row dictionary for this PDF
                 row_data = {
                     'filename': os.path.basename(file),
-                    'food': food,
+                    list: food,
                     'hazard': hazard,
                     'quote': quote,
                     'location': location,
@@ -151,11 +155,11 @@ def upload_analyze_papers(food, hazard, pdfs, API_Key, question='default'):
 
     return all_results
 
-def download_read_export(food, hazard, API_Key, scholar_pages=[1,2], scholar_results=20, question='default', skip_if_folder_exists = True):
+def download_read_export(list,food, hazard, API_Key, scholar_pages=[1,2], scholar_results=20, question='default', skip_if_folder_exists = True):
     start_time = time.time() #start timer
 
     pdfs = download_papers(food, hazard, scholar_pages, scholar_results, skip_if_folder_exists)
-    df = upload_analyze_papers(food, hazard,pdfs, API_Key, question='default')
+    df = upload_analyze_papers(list,food, hazard,pdfs, API_Key, question='default')
     return df
 
     end_time = time.time() #stop timer
