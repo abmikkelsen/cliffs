@@ -32,6 +32,7 @@ def import_foodlist(filename):
     other_cd = list(set(other_datac))
 
     #split other list by /
+    #### need to check for / with spaces
     other_datacds = [x for x in other_cd for x in x.split('/')]
 
     #create a dictionary to store the lists
@@ -67,6 +68,7 @@ def download_papers(food, hazard, scholar_pages=[1,2], scholar_results=20, skip_
 
 
 def upload_analyze_papers(list,food, hazard, pdfs, API_Key, question='default'):
+    
     all_results = pd.DataFrame(columns=['filename', 'foodname','species','othername', 'hazard', 'quote', 'location', 'pos/neg', 'how','howquote']) 
 
 
@@ -155,7 +157,7 @@ def upload_analyze_papers(list,food, hazard, pdfs, API_Key, question='default'):
 
     return all_results
 
-def download_read_export(list,food, hazard, API_Key, scholar_pages=[1,2], scholar_results=20, question='default', skip_if_folder_exists = True):
+def download_read_export(list, food, hazard, API_Key, scholar_pages=[1,2], scholar_results=20, question='default', skip_if_folder_exists = True):
     start_time = time.time() #start timer
 
     pdfs = download_papers(food, hazard, scholar_pages, scholar_results, skip_if_folder_exists)
