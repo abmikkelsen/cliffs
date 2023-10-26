@@ -67,7 +67,7 @@ def download_papers(food, hazard, scholar_pages=[1,2], scholar_results=20, skip_
     return pdfs
 
 
-def upload_analyze_papers(list,food, hazard, pdfs, API_Key, question='default'):
+def upload_analyze_papers(list, food, hazard, pdfs, API_Key, question='default'):
     
     all_results = pd.DataFrame(columns=['filename', 'foodname','species','othername', 'hazard', 'quote', 'location', 'pos/neg', 'how','howquote']) 
 
