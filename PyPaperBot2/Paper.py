@@ -4,7 +4,7 @@ Created on Mon Jun  8 21:43:30 2020
 
 @author: Vito
 """
-import bibtexparser
+#import bibtexparser
 import re
 import csv
 import os

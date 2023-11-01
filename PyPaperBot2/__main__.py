@@ -43,8 +43,12 @@ def start(query, scholar_results, scholar_pages, dwn_dir, proxy, min_date=None, 
             to_download.sort(key=lambda x: int(x.cites_num) if x.cites_num!=None else 0, reverse=True)
 
         # Filter to_download against what/s in the papers folder 
-        filtered_to_download = [paper for paper in to_download if not os.path.isfile(os.path.join(dwn_dir, paper.title + '.pdf'))]
-       
+        for paper in to_download:
+            pdf_path = os.path.join(dwn_dir, paper.title + '.pdf')
+            paper.downloaded = os.path.isfile(pdf_path)
+
+        filtered_to_download = [paper for paper in to_download if not paper.downloaded]
+
         if len(filtered_to_download) == 0:
            print('Already downloaded all files')
         else:
