@@ -67,7 +67,7 @@ def download_papers(food, hazard, scholar_pages=[1,2], scholar_results=20, skip_
     return pdfs
 
 
-def upload_analyze_papers(list, food, hazard, pdfs, API_Key, question='default'):
+def upload_analyze_papers(foodlist, food, hazard, pdfs, API_Key, question='default'):
     
     all_results = pd.DataFrame(columns=['filename', 'foodname','species','othername', 'hazard', 'quote', 'location', 'pos/neg', 'how','howquote']) 
 
@@ -139,7 +139,7 @@ def upload_analyze_papers(list, food, hazard, pdfs, API_Key, question='default')
                 # Create a row dictionary for this PDF
                 row_data = {
                     'filename': os.path.basename(file),
-                    list: food,
+                    foodlist: food,
                     'hazard': hazard,
                     'quote': quote,
                     'location': location,
@@ -157,11 +157,11 @@ def upload_analyze_papers(list, food, hazard, pdfs, API_Key, question='default')
 
     return all_results
 
-def download_read_export(list, food, hazard, API_Key, scholar_pages=[1,2], scholar_results=20, question='default', skip_if_folder_exists = True):
+def download_read_export(foodlist, food, hazard, API_Key, scholar_pages=[1,2], scholar_results=20, question='default', skip_if_folder_exists = True):
     start_time = time.time() #start timer
 
     pdfs = download_papers(food, hazard, scholar_pages, scholar_results, skip_if_folder_exists)
-    df = upload_analyze_papers(list,food, hazard,pdfs, API_Key, question='default')
+    df = upload_analyze_papers(foodlist,food, hazard,pdfs, API_Key, question='default')
     return df
 
     end_time = time.time() #stop timer
