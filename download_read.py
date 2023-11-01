@@ -50,20 +50,19 @@ def import_foodlist(filename):
 def download_papers(food, hazard, scholar_pages=[1,2], scholar_results=20, skip_if_folder_exists = True):
   ## ----------------------------------- ###
     # specify download folder
-    folder_name = f'{food}_{hazard}'
-    dwn_dir = os.path.join(os.getcwd(), folder_name)
-    if os.path.exists(dwn_dir) and skip_if_folder_exists:
-        pdfs = glob.glob(os.path.join(dwn_dir, '*.pdf'))
-        print('found %d papers in the folder "%s"' %(len(pdfs), folder_name))
-    else: # not os.path.exists(dwn_dir)
-        os.mkdir(dwn_dir)
-        # make query:
-        query = f'{food}+{hazard}'
-        #download papers from google scholar
-        p.start(query=query, scholar_pages=scholar_pages, scholar_results=scholar_results, dwn_dir=dwn_dir, proxy=[])
+    dwn_dir = os.getcwd() + "/papers/"
 
-        pdfs = glob.glob(os.path.join(dwn_dir, '*.pdf'))
-        print('downloaded %d of %d papers' %(len(pdfs), scholar_results))
+    # Create papers directory 
+    os.makedirs(dwn_dir, exist_ok=True)
+
+    # Make the query:
+    query = f'{food} {hazard}'
+    # Download papers from Google Scholar
+    p.start(query=query, scholar_pages=scholar_pages, scholar_results=scholar_results, dwn_dir=dwn_dir, proxy=[])
+
+    pdfs = glob.glob(os.path.join(dwn_dir, '*.pdf'))
+    print('downloaded %d of %d papers' % (len(pdfs), scholar_results))
+    print("Done")
     return pdfs
 
 
