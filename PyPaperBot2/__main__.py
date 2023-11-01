@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-
+import os
 import argparse
 import sys
-from .Paper import Paper
-from .PapersFilters import filterJurnals, filter_min_date, similarStrings
-from .Downloader import downloadPapers
-from .Scholar import ScholarPapersInfo
-from .Crossref import getPapersInfoFromDOIs
-from .proxy import proxy
+from PyPaperBot2.Paper import Paper
+from PyPaperBot2.PapersFilters import filterJurnals, filter_min_date, similarStrings
+from PyPaperBot2.Downloader import downloadPapers
+from PyPaperBot2.Scholar import ScholarPapersInfo
+from PyPaperBot2.Crossref import getPapersInfoFromDOIs
+from PyPaperBot2.proxy import proxy
 
 def start(query, scholar_results, scholar_pages, dwn_dir, proxy, min_date=None, num_limit=None, num_limit_type=None, filter_jurnal_file=None, restrict=None, DOIs=None, SciHub_URL=None):
-
+    print('starting bot 2...')
     to_download = []
     if DOIs==None:
         print("Query: {}".format(query))
@@ -42,10 +42,16 @@ def start(query, scholar_results, scholar_pages, dwn_dir, proxy, min_date=None, 
         if num_limit_type!=None and num_limit_type==1:
             to_download.sort(key=lambda x: int(x.cites_num) if x.cites_num!=None else 0, reverse=True)
 
-        downloadPapers(to_download, dwn_dir, num_limit, SciHub_URL)
- 
-    Paper.generateReport(to_download,dwn_dir +f"result-{query}.csv")
-    # Paper.generateBibtex(to_download,dwn_dir+"bibtex.bib")
+        # Filter to_download against what/s in the papers folder 
+        filtered_to_download = [paper for paper in to_download if not os.path.isfile(os.path.join(dwn_dir, paper.title + '.pdf'))]
+       
+        if len(filtered_to_download) == 0:
+           print('Already downloaded all files')
+        else:
+           downloadPapers(filtered_to_download, dwn_dir, num_limit, SciHub_URL)
+        
+        Paper.generateReport(to_download,dwn_dir +f"result - {query}.csv")
+        # Paper.generateBibtex(to_download,dwn_dir+"bibtex.bib")
 
 
 def main():

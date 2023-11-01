@@ -7,8 +7,8 @@
 
 import requests
 import glob
-import PyPaperBot
-from PyPaperBot import __main__ as p
+import PyPaperBot2
+from PyPaperBot2 import __main__ as p
 import os
 import time
 import pandas as pd
