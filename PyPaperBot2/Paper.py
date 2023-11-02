@@ -61,13 +61,15 @@ class Paper:
         return False
 
 
-    def generateReport(papers, path):
-        with open(path, mode="w", encoding='utf-8', newline='', buffering=1) as w_file:
-            content = ["Name", "Scholar Link", "DOI", "Bibtex",
-                       "PDF Name", "Year", "Scholar page", "Journal",
-                       "Downloaded", "Downloaded from", "Authors"]
+    def generateReport(papers, path, food, hazard, nametype):
+        with open(path, mode="a+", encoding='utf-8', newline='', buffering=1) as w_file:
+            content = ["Food", "Hazard", "Nametype", "Paper Name", "DOI", "PDF Name", 
+                       "Year", "Journal", "Authors"]
+            # content = ["Food", "Hazard", "Name", "Scholar Link", "DOI", "Bibtex",
+            #            "PDF Name", "Year", "Scholar page", "Journal",
+            #            "Downloaded", "Downloaded from", "Authors"]
             file_writer = csv.DictWriter(w_file, delimiter = ",", lineterminator=os.linesep, fieldnames=content)
-            file_writer.writeheader()
+            #file_writer.writeheader()
 
             for p in papers:
                 pdf_name = p.getFileName() if p.downloaded==True else ""
@@ -80,18 +82,30 @@ class Paper:
                     dwn_from = "Scholar"
 
                 file_writer.writerow({
-                        "Name" : p.title,
-                        "Scholar Link" : p.scholar_link,
+                        "Food" : food,
+                        "Hazard": hazard,
+                        "Nametype": nametype,
+                        "Paper Name" : p.title,
                         "DOI" : p.DOI,
-                        "Bibtex" : bibtex_found,
                         "PDF Name" : pdf_name,
                         "Year" : p.year,
-                        "Scholar page" : p.scholar_page,
                         "Journal" : p.jurnal,
-                        "Downloaded" : p.downloaded,
-                        "Downloaded from" : dwn_from,
                         "Authors" : p.authors})
 
+                # file_writer.writerow({
+                #         "Food" : food,
+                #         "Hazard": hazard,
+                #         "Name" : p.title,
+                #         "Scholar Link" : p.scholar_link,
+                #         "DOI" : p.DOI,
+                #         "Bibtex" : bibtex_found,
+                #         "PDF Name" : pdf_name,
+                #         "Year" : p.year,
+                #         "Scholar page" : p.scholar_page,
+                #         "Journal" : p.jurnal,
+                #         "Downloaded" : p.downloaded,
+                #         "Downloaded from" : dwn_from,
+                #         "Authors" : p.authors})
 
     def generateBibtex(papers, path):
         content = ""

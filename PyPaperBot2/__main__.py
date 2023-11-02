@@ -9,7 +9,7 @@ from PyPaperBot2.Scholar import ScholarPapersInfo
 from PyPaperBot2.Crossref import getPapersInfoFromDOIs
 from PyPaperBot2.proxy import proxy
 
-def start(query, scholar_results, scholar_pages, dwn_dir, proxy, min_date=None, num_limit=None, num_limit_type=None, filter_jurnal_file=None, restrict=None, DOIs=None, SciHub_URL=None):
+def start(query, scholar_results, scholar_pages, dwn_dir, proxy, food, hazard, nametype, min_date=None, num_limit=None, num_limit_type=None, filter_jurnal_file=None, restrict=None, DOIs=None, SciHub_URL=None):
     print('starting bot 2...')
     to_download = []
     if DOIs==None:
@@ -54,7 +54,8 @@ def start(query, scholar_results, scholar_pages, dwn_dir, proxy, min_date=None, 
         else:
            downloadPapers(filtered_to_download, dwn_dir, num_limit, SciHub_URL)
         
-        Paper.generateReport(to_download,dwn_dir +f"result - {query}.csv")
+        # Paper.generateReport(to_download, (dwn_dir +f"result - {query}.csv"), food, hazard, nametype)
+        Paper.generateReport(to_download, (dwn_dir +"result.csv"), food, hazard, nametype)
         # Paper.generateBibtex(to_download,dwn_dir+"bibtex.bib")
 
 

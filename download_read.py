@@ -13,6 +13,8 @@ import os
 import time
 import pandas as pd
 import re
+import csv
+
 
 #Function to import food list csv and add to search terms
 def import_foodlist(filename):
@@ -47,18 +49,26 @@ def import_foodlist(filename):
 
 # FUNCTIONS to download and review the papers
 
-def download_papers(food, hazard, scholar_pages=[1,2], scholar_results=20, skip_if_folder_exists = True):
+def download_papers(food, hazard, nametype, scholar_pages=[1,2], scholar_results=20, skip_if_folder_exists = True):
   ## ----------------------------------- ###
     # specify download folder
     dwn_dir = os.getcwd() + "/papers/"
 
     # Create papers directory 
     os.makedirs(dwn_dir, exist_ok=True)
+    
+    # Initiate results csv
+    path_results = dwn_dir + "result.csv"
+    with open(path_results, mode="a+", encoding='utf-8', newline='', buffering=1) as w_file:
+        content = ["Food", "Hazard", "Nametype", "Paper Name", "DOI", "PDF Name", 
+                    "Year", "Journal", "Authors"]
+        file_writer = csv.DictWriter(w_file, delimiter = ",", lineterminator=os.linesep, fieldnames=content)
+        file_writer.writeheader()
 
     # Make the query:
     query = f'{food} {hazard}'
     # Download papers from Google Scholar
-    p.start(query=query, scholar_pages=scholar_pages, scholar_results=scholar_results, dwn_dir=dwn_dir, proxy=[])
+    p.start(query=query, scholar_pages=scholar_pages, scholar_results=scholar_results, dwn_dir=dwn_dir, proxy=[], food=food, hazard=hazard, nametype=nametype)
 
     pdfs = glob.glob(os.path.join(dwn_dir, '*.pdf'))
     print('downloaded %d of %d papers' % (len(pdfs), scholar_results))
