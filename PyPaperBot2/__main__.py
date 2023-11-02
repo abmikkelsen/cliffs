@@ -54,8 +54,20 @@ def start(query, scholar_results, scholar_pages, dwn_dir, proxy, food, hazard, n
         else:
            downloadPapers(filtered_to_download, dwn_dir, num_limit, SciHub_URL)
         
-        # Paper.generateReport(to_download, (dwn_dir +f"result - {query}.csv"), food, hazard, nametype)
-        Paper.generateReport(to_download, (dwn_dir +"result.csv"), food, hazard, nametype)
+        ## make a dict of names to pass to the write-csv function
+        names = dict()
+        names['foodname'],names['species'],names['othername'] = 'NaN', 'NaN', 'NaN'
+        if nametype == 'foodname':
+            names['foodname'] = food
+        elif nametype == 'species':
+            names['species'] = food
+        elif nametype == 'othername':
+            names['othername'] = food
+        else:
+            names['othername'] = 'other: ' + food
+
+        Paper.generateReport(to_download, (dwn_dir +f"result - {query}.csv"), names, hazard)
+        Paper.generateReport_master(to_download, (dwn_dir +"result.csv"), names, hazard)
         # Paper.generateBibtex(to_download,dwn_dir+"bibtex.bib")
 
 

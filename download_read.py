@@ -59,11 +59,12 @@ def download_papers(food, hazard, nametype, scholar_pages=[1,2], scholar_results
     
     # Initiate results csv
     path_results = dwn_dir + "result.csv"
-    with open(path_results, mode="a+", encoding='utf-8', newline='', buffering=1) as w_file:
-        content = ["Food", "Hazard", "Nametype", "Paper Name", "DOI", "PDF Name", 
-                    "Year", "Journal", "Authors"]
-        file_writer = csv.DictWriter(w_file, delimiter = ",", lineterminator=os.linesep, fieldnames=content)
-        file_writer.writeheader()
+    if not os.path.exists(path_results):
+        with open(path_results, mode="a+", encoding='utf-8', newline='', buffering=1) as w_file:
+            content = ["Hazard", "Foodname", 'Species', "Othername", "Paper Name", "DOI", "PDF Name", 
+                        "Year", "Journal", "Authors"]
+            file_writer = csv.DictWriter(w_file, delimiter = ",", lineterminator=os.linesep, fieldnames=content)
+            file_writer.writeheader()
 
     # Make the query:
     query = f'{food} {hazard}'

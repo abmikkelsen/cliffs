@@ -61,15 +61,15 @@ class Paper:
         return False
 
 
-    def generateReport(papers, path, food, hazard, nametype):
-        with open(path, mode="a+", encoding='utf-8', newline='', buffering=1) as w_file:
-            content = ["Food", "Hazard", "Nametype", "Paper Name", "DOI", "PDF Name", 
+    def generateReport(papers, path, names, hazard):
+        with open(path, mode="w", encoding='utf-8', newline='', buffering=1) as w_file:
+            content = ["Hazard", "Foodname", 'Species', "Othername", "Paper Name", "DOI", "PDF Name", 
                        "Year", "Journal", "Authors"]
             # content = ["Food", "Hazard", "Name", "Scholar Link", "DOI", "Bibtex",
             #            "PDF Name", "Year", "Scholar page", "Journal",
             #            "Downloaded", "Downloaded from", "Authors"]
             file_writer = csv.DictWriter(w_file, delimiter = ",", lineterminator=os.linesep, fieldnames=content)
-            #file_writer.writeheader()
+            file_writer.writeheader()
 
             for p in papers:
                 pdf_name = p.getFileName() if p.downloaded==True else ""
@@ -82,9 +82,10 @@ class Paper:
                     dwn_from = "Scholar"
 
                 file_writer.writerow({
-                        "Food" : food,
                         "Hazard": hazard,
-                        "Nametype": nametype,
+                        "Foodname" : names['foodname'],
+                        "Species" : names['species'],
+                        "Othername" : names['othername'],
                         "Paper Name" : p.title,
                         "DOI" : p.DOI,
                         "PDF Name" : pdf_name,
@@ -106,6 +107,36 @@ class Paper:
                 #         "Downloaded" : p.downloaded,
                 #         "Downloaded from" : dwn_from,
                 #         "Authors" : p.authors})
+
+    def generateReport_master(papers, path, names, hazard):
+        with open(path, mode="a+", encoding='utf-8', newline='', buffering=1) as w_file:
+            content = ["Hazard", "Foodname", 'Species', "Othername", "Paper Name", "DOI", "PDF Name", 
+                       "Year", "Journal", "Authors"]
+            file_writer = csv.DictWriter(w_file, delimiter = ",", lineterminator=os.linesep, fieldnames=content)
+            #file_writer.writeheader()
+
+            for p in papers:
+                pdf_name = p.getFileName() if p.downloaded==True else ""
+                bibtex_found = True if p.bibtex!=None else False
+
+                dwn_from = ""
+                if p.downloadedFrom == 1:
+                    dwn_from = "SciHub"
+                if p.downloadedFrom == 2:
+                    dwn_from = "Scholar"
+
+                file_writer.writerow({
+                        "Hazard": hazard,
+                        "Foodname" : names['foodname'],
+                        "Species" : names['species'],
+                        "Othername" : names['othername'],
+                        "Paper Name" : p.title,
+                        "DOI" : p.DOI,
+                        "PDF Name" : pdf_name,
+                        "Year" : p.year,
+                        "Journal" : p.jurnal,
+                        "Authors" : p.authors})
+
 
     def generateBibtex(papers, path):
         content = ""
