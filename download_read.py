@@ -47,6 +47,21 @@ def import_foodlist(filename):
     return foodlist
 
 
+def import_foodlist_species(filename):
+    df = pd.read_csv(filename)
+    
+    #extract data from columns
+    species_data = df['OurName'].tolist()
+
+    #create a dictionary to store the lists
+    foodlist = {
+        'species': species_data,
+    }
+    
+    return foodlist
+
+
+
 # FUNCTIONS to download and review the papers
 
 def download_papers(food, hazard, nametype, scholar_pages=[1,2], scholar_results=20, skip_if_folder_exists = True):
