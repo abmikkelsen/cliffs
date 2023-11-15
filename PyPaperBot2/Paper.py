@@ -63,7 +63,7 @@ class Paper:
 
     def generateReport(papers, path, names, hazard):
         with open(path, mode="w", encoding='utf-8', newline='', buffering=1) as w_file:
-            content = ["Hazard", "Foodname", 'Species', "Othername", "Paper Name", "DOI", "PDF Name", 
+            content = ["Hazard", "Foodname", 'Species', "Othername", "Paper Name", "DOI", "PDF Name", "URL",
                        "Year", "Journal", "Authors"]
             # content = ["Food", "Hazard", "Name", "Scholar Link", "DOI", "Bibtex",
             #            "PDF Name", "Year", "Scholar page", "Journal",
@@ -89,6 +89,7 @@ class Paper:
                         "Paper Name" : p.title,
                         "DOI" : p.DOI,
                         "PDF Name" : pdf_name,
+                        "URL" : p.scholar_link,
                         "Year" : p.year,
                         "Journal" : p.jurnal,
                         "Authors" : p.authors})
@@ -110,7 +111,7 @@ class Paper:
 
     def generateReport_master(papers, path, names, hazard):
         with open(path, mode="a+", encoding='utf-8', newline='', buffering=1) as w_file:
-            content = ["Hazard", "Foodname", 'Species', "Othername", "Paper Name", "DOI", "PDF Name", 
+            content = ["Hazard", "Foodname", 'Species', "Othername", "Paper Name", "DOI", "PDF Name", "URL",
                        "Year", "Journal", "Authors"]
             file_writer = csv.DictWriter(w_file, delimiter = ",", lineterminator=os.linesep, fieldnames=content)
             #file_writer.writeheader()
@@ -133,6 +134,7 @@ class Paper:
                         "Paper Name" : p.title,
                         "DOI" : p.DOI,
                         "PDF Name" : pdf_name,
+                        "URL" : p.scholar_link,
                         "Year" : p.year,
                         "Journal" : p.jurnal,
                         "Authors" : p.authors})
